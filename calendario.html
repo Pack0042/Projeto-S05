@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agenda Semanal</title>
+
+  <!-- FullCalendar CSS (v5.11.3) -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+  <!-- FullCalendar JS (v5.11.3) -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+  <!-- Idioma em Português -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #calendar { max-width: 1000px; margin: 0 auto; }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        position: relative;
+
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
+    }
+
+    .modal.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .close {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Modal -->
+    <div id="eventModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h3 id="modalTitle"></h3>
+        <p><strong>Início:</strong> <span id="modalStart"></span></p>
+        <p><strong>Fim:</strong> <span id="modalEnd"></span></p>
+    </div>
+    </div>
+
+
+
+  <h2>Agenda Semanal</h2>
+  <div id='calendar'></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'timeGridWeek',
+        allDaySlot: false,
+        slotDuration: '00:30:00',
+        slotMinTime: '08:00:00',
+        slotMaxTime: '22:30:00',
+        locale: 'pt-br',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'timeGridWeek,timeGridDay'
+        },
+        slotLabelFormat: {
+            hour: 'numeric',
+            minute: '2-digit',
+            omitZeroMinute: false,
+            meridiem: false
+        },
+        events: [
+            {
+            title: 'Reunião Equipe',
+            start: '2025-06-10T09:00:00',
+            end: '2025-06-10T10:00:00'
+            },
+
+            {
+            title: 'Palestra Huawei',
+            start: '2025-06-10T09:00:00',
+            end: '2025-06-10T10:00:00',
+            backgroundColor: '#007bff',
+            borderColor: '#0056b3',    
+            textColor: 'black'           
+            },
+
+
+            {
+            title: 'Aula de Física',
+            start: '2025-06-11T14:00:00',
+            end: '2025-06-11T15:30:00'
+            }
+        ],
+
+        selectable: true,
+        dateClick: function(info) {
+            alert('Clique na agenda em: ' + info.dateStr);
+        },
+
+        eventClick: function(info) {
+            const modal = document.getElementById('eventModal');
+            document.getElementById('modalTitle').textContent = info.event.title;
+            document.getElementById('modalStart').textContent = info.event.start.toLocaleString();
+            document.getElementById('modalEnd').textContent = info.event.end
+                ? info.event.end.toLocaleString()
+                : 'N/A';
+            modal.classList.add('show');
+        }
+
+
+        });
+        
+
+        calendar.render();
+    });
+
+    document.getElementById('closeModal').onclick = function () {
+        document.getElementById('eventModal').classList.remove('show');
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('eventModal');
+        if (event.target === modal) {
+            modal.classList.remove('show');
+        }
+    }
+
+    </script>
+
+</body>
+</html>
