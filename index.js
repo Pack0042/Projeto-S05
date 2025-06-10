@@ -64,7 +64,7 @@ function TemaDark() {
 
     erroDiv.style.display = "none";
 
-    window.location.pathname = "/principal.html";
+    window.location.pathname = "/Projeto-S05/principal.html";
 }
 
 function MostrarErro(mensagem) {
